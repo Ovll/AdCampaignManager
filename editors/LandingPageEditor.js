@@ -25,6 +25,8 @@ class LandingPageEditor {
         this.collectLeadsCheckbox = document.getElementById('landing-collect-leads');
         this.saveBtn = document.getElementById('save-landing-btn');
         this.previewContainer = document.getElementById('landing-preview-container');
+        this.downloadHtmlBtn = document.getElementById('download-html-btn');
+
 
         this.currentTemplateId = 'template1'; // Default template
 
@@ -110,6 +112,8 @@ class LandingPageEditor {
         if (this.collectLeadsCheckbox) this.collectLeadsCheckbox.addEventListener('change', () => this.updatePreview());
 
         if (this.saveBtn) this.saveBtn.addEventListener('click', () => this.savePage());
+        if (this.downloadHtmlBtn) this.downloadHtmlBtn.addEventListener('click', () => this.downloadHtml());
+
 
         document.addEventListener('DOMContentLoaded', () => this.render());
     }
@@ -264,6 +268,49 @@ class LandingPageEditor {
 
         console.log('Landing page saved and campaign updated.');
     }
+
+    /**
+     * Downloads the current landing page as an HTML file.
+     */
+    downloadHtml() {
+        if (!this.previewContainer) {
+            console.error('Preview container not found.');
+            return;
+        }
+
+        const pageTitle = this.titleInput?.value || 'Landing Page';
+        const htmlContent = this.previewContainer.innerHTML;
+
+        // Construct a full HTML document (optional, but good practice for a standalone file)
+        const fullHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${pageTitle}</title>
+    <style>
+        body { margin: 0; padding: 0; }
+        /* Include any common styles or styles needed by your templates */
+        /* For example, if you used Tailwind, you'd compile it or include CDN here */
+    </style>
+</head>
+<body>
+    ${htmlContent}
+</body>
+</html>`;
+
+        const blob = new Blob([fullHtml], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${pageTitle.replace(/[^a-zA-Z0-9]/g, '_')}.html`; // Sanitize filename
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url); // Clean up the object URL
+        console.log('Landing page HTML downloaded.');
+    }
+
 
     /**
      * Renders the Landing Page Editor screen.
