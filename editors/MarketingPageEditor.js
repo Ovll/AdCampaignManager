@@ -132,6 +132,10 @@ class MarketingPageEditor {
      */
     _applyTemplate(templateId) {
         // These values are just initial suggestions, not forced by template HTML
+        const currentTitle = this.titleInput?.value || '';
+        const currentParagraph1 = this.paragraph1Input?.value || '';
+        const currentImageUrl = this.imageUrlInput?.value || '';
+
         const templatesDefaults = {
             template1: {
                 title: 'Welcome to Our New Campaign!',
@@ -164,6 +168,10 @@ class MarketingPageEditor {
             if (this.bgColorInput) this.bgColorInput.value = defaults.bgColor;
             if (this.textColorInput) this.textColorInput.value = defaults.textColor;
         }
+        // Restore the user's custom values if they exist
+        if (currentTitle) this.titleInput.value = currentTitle;
+        if (currentParagraph1) this.paragraph1Input.value = currentParagraph1;
+        if (currentImageUrl) this.imageUrlInput.value = currentImageUrl;
     }
 
 

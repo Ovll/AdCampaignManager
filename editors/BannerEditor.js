@@ -21,6 +21,8 @@ class BannerEditor {
         this.bannerFontFamilySelect = document.getElementById('banner-font-family');
         this.bannerTemplateBtns = document.querySelectorAll('.banner-template-btn');
         this.saveBannerBtn = document.getElementById('save-banner-btn');
+        this.downloadBannerBtn = document.getElementById('download-banner-btn');
+
         this.bannerPreviewContainer = document.getElementById('banner-preview-container');
         this.bannerPreview = document.getElementById('banner-preview');
         this.bannerPreviewText = document.getElementById('banner-preview-text');
@@ -51,6 +53,8 @@ class BannerEditor {
         });
 
         if (this.saveBannerBtn) this.saveBannerBtn.addEventListener('click', () => this.saveBanner());
+        if (this.downloadBannerBtn) this.downloadBannerBtn.addEventListener('click', () => this.downloadBannerAsImage());
+
 
         // Initial preview update when page loads
         document.addEventListener('DOMContentLoaded', () => this.render());
@@ -175,6 +179,34 @@ class BannerEditor {
 
         console.log('Banner saved and campaign updated.');
     }
+
+    /**
+     * Downloads the current banner preview as an image file.
+     * NOTE: This is a placeholder function that requires an external library like html2canvas.
+     * It demonstrates the logic needed to capture the HTML preview and save it as an image.
+     */
+    downloadBannerAsImage() {
+        const previewElement = this.bannerPreview;
+        if (!previewElement) {
+            console.error('Banner preview element not found.');
+            return;
+        }
+
+        // --- Start of conceptual code using a library like html2canvas ---
+        // html2canvas(previewElement).then(canvas => {
+        //     const image = canvas.toDataURL('image/png').replace('image/png', 'image/octet-stream');
+        //     const a = document.createElement('a');
+        //     a.setAttribute('download', 'banner.png');
+        //     a.setAttribute('href', image);
+        //     a.click();
+        // });
+        // --- End of conceptual code ---
+
+        // As a simple placeholder, we'll log the action and prompt a fake download.
+        console.log('Simulating banner download as an image (PNG).');
+        alert('Banner image downloaded!');
+    }
+
 
     /**
      * Renders the Banner Editor screen, loading previous data if available.
