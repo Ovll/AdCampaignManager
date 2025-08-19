@@ -36,7 +36,7 @@ class MarketingPageEditor {
      * @private
      */
     _getTemplateHtml(templateId) {
-        const defaultImageUrl = 'https://placehold.co/600x200/cccccc/333333?text=Your+Image';
+        const defaultImageUrl = '[https://placehold.co/600x200/cccccc/333333?text=Your+Image](https://placehold.co/600x200/cccccc/333333?text=Your+Image)';
         switch (templateId) {
             case 'template1':
                 return `
@@ -44,7 +44,7 @@ class MarketingPageEditor {
                     <h1 style="text-align: center; color: {textColor};">{title}</h1>
                     <img src="{imageUrl}" alt="Marketing Image" style="width: 100%; height: auto; display: block; margin-bottom: 20px; border-radius: 8px;">
                     <p style="text-align: center; line-height: 1.5;">{paragraph1}</p>
-                    <p style="text-align: center; font-size: 14px; margin-top: 30px;">© 2023 Your Company. All rights reserved.</p>
+                    <p style="text-align: center; font-size: 14px; margin-top: 30px;">© 2025 Your Company. All rights reserved.</p>
                 </div>
                 `;
             case 'template2':
@@ -88,7 +88,7 @@ class MarketingPageEditor {
                             </td>
                         </tr>
                     </table>
-                    <p style="text-align: right; font-size: 12px; margin-top: 40px;">Confidential &copy; 2023</p>
+                    <p style="text-align: right; font-size: 12px; margin-top: 40px;">Confidential &copy; 2025</p>
                 </div>
                 `;
             default:
@@ -131,26 +131,31 @@ class MarketingPageEditor {
      * @private
      */
     _applyTemplate(templateId) {
+        // Store current values before they are overwritten
+        const currentTitle = this.titleInput?.value || '';
+        const currentParagraph1 = this.paragraph1Input?.value || '';
+        const currentImageUrl = this.imageUrlInput?.value || '';
+
         // These values are just initial suggestions, not forced by template HTML
         const templatesDefaults = {
             template1: {
                 title: 'Welcome to Our New Campaign!',
                 paragraph1: 'Discover amazing new offers and products designed just for you. Click below to learn more!',
-                imageUrl: 'https://placehold.co/600x200/cccccc/333333?text=Your+Image',
+                imageUrl: '[https://placehold.co/600x200/cccccc/333333?text=Your+Image](https://placehold.co/600x200/cccccc/333333?text=Your+Image)',
                 bgColor: '#f8f8f8',
                 textColor: '#333333'
             },
             template2: {
                 title: 'Exclusive Offer Just For You!',
                 paragraph1: 'Don\'t miss out on our limited-time discounts. Get ready for savings that will surprise you!',
-                imageUrl: 'https://placehold.co/600x300/aaddff/000000?text=Special+Deal',
+                imageUrl: '[https://placehold.co/600x300/aaddff/000000?text=Special+Deal](https://placehold.co/600x300/aaddff/000000?text=Special+Deal)',
                 bgColor: '#e0f7fa',
                 textColor: '#004d40'
             },
             template3: {
                 title: 'Quick Update from Our Team',
                 paragraph1: 'We\'ve got exciting news coming soon. Stay tuned for more information.',
-                imageUrl: 'https://placehold.co/200x150/ffcccb/880000?text=News',
+                imageUrl: '[https://placehold.co/200x150/ffcccb/880000?text=News](https://placehold.co/200x150/ffcccb/880000?text=News)',
                 bgColor: '#fffde7',
                 textColor: '#424242'
             }
@@ -164,6 +169,11 @@ class MarketingPageEditor {
             if (this.bgColorInput) this.bgColorInput.value = defaults.bgColor;
             if (this.textColorInput) this.textColorInput.value = defaults.textColor;
         }
+
+        // Restore the user's custom values if they exist
+        if (currentTitle) this.titleInput.value = currentTitle;
+        if (currentParagraph1) this.paragraph1Input.value = currentParagraph1;
+        if (currentImageUrl) this.imageUrlInput.value = currentImageUrl;
     }
 
 
@@ -255,22 +265,22 @@ class MarketingPageEditor {
      */
     sendPage() {
         const activeCampaign = this.campaignService.getActiveCampaign();
-        if (!activeCampaign || !this.previewContainer) {
-            console.error('No active marketing page or preview to send.');
+        if (!activeCampaign || !activeCampaign.assets.marketingPage) {
+            console.error('No active marketing page to send.');
             return;
         }
 
         const pageData = activeCampaign.assets.marketingPage;
-        const htmlContent = this.previewContainer.innerHTML; // Get the live preview HTML content
         const recipientEmail = 'example@recipient.com'; // In a real app, this would be a user input
 
         console.log(`Sending marketing page from campaign "${activeCampaign.name}" to ${recipientEmail}...`);
-        console.log('Using rendered HTML content from the preview.');
-        // In a real scenario, you would send this 'htmlContent' via a backend service
-        // that handles SMTP, API calls (e.g., SendGrid, Mailgun), etc.
+        console.log('Title:', pageData.title);
+        console.log('Paragraph:', pageData.paragraph1);
+        console.log('Image URL:', pageData.imageUrl);
+
 
         alert('Marketing page sent for review (simulated)!');
-        console.log('Simulated email sent with HTML content.');
+        console.log('Simulated email sent.');
     }
 
 
@@ -283,6 +293,7 @@ class MarketingPageEditor {
 }
 
 export default MarketingPageEditor;
+
 
 
 // In a real-world scenario, you would make an API call here:
